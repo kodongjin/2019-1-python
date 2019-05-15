@@ -1,14 +1,21 @@
 import requests
 
 from bs4 import BeautifulSoup
+ 
+html = requests.get('https://www.daum.net/').text
 
-req = requests.get("https://www.daum.net/")
+soup = BeautifulSoup(html, 'html.parser')
+ 
+title_list = soup.select('.hotissue_mini a[class*=link_issue]')
 
-soup=BeautifulSoup(req.text, 'html.parser')
+ranking = soup.select('.list_mini span[class*=ir_wa]')
+ 
+for rank,title in zip(ranking , title_list):
 
-b=soup.find_all("span", {'class', 'txt_issue' } )
+    r = ''.join(rank)
 
-idx = 1
-for i in b:
-    print(str(idx) + '위  ' + i.text)
-    idx += 0.5
+    t = ''.join(title)
+ 
+    print("{}:{}".format(r, t))
+
+
